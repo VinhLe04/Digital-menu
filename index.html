@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta 
+    name="viewport" 
+    content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+  <title>Menu Video Loop</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: black;
+    }
+    #player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    id="player"
+    src="https://www.youtube.com/embed/MSmKGhBhc1I?autoplay=1&mute=1&loop=1&playlist=MSmKGhBhc1I&controls=0&disablekb=1&modestbranding=1&rel=0&showinfo=0&fs=0"
+    frameborder="0"
+    allow="autoplay; fullscreen"
+    allowfullscreen
+  ></iframe>
+
+  <script>
+    // Prevent right-click and keypress
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => e.preventDefault());
+  </script>
+</body>
+</html>
