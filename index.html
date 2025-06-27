@@ -96,6 +96,7 @@
     function enableAudio() {
       const audio = document.getElementById('background-audio');
       const permissionOverlay = document.getElementById('audio-permission');
+      const videoIframe = document.getElementById('player');
       
       // Try to play the audio
       audio.play().then(function() {
@@ -104,18 +105,45 @@
         // Hide the permission overlay
         permissionOverlay.style.display = 'none';
       }).catch(function(error) {
-        // Audio failed to start
+        // Audio failed to start (common on WebOS)
         console.log('Audio playback failed:', error);
-        alert('Unable to play audio. Please check your browser settings.');
+        
+        // On WebOS, we'll continue without audio but don't show an error
+        // Just hide the overlay and let the video play
+        permissionOverlay.style.display = 'none';
+        
+        // Ensure video is still playing by refreshing the iframe if needed
+        if (videoIframe) {
+          const currentSrc = videoIframe.src;
+          // Force a small refresh to ensure video continues
+          setTimeout(function() {
+            if (videoIframe.src === currentSrc) {
+              videoIframe.src = currentSrc;
+            }
+          }, 100);
+        }
       });
     }
     
     // Function to continue without audio
     function continueWithoutAudio() {
       const permissionOverlay = document.getElementById('audio-permission');
+      const videoIframe = document.getElementById('player');
       console.log('User chose to continue without audio');
+      
       // Hide the permission overlay
       permissionOverlay.style.display = 'none';
+      
+      // Ensure video is playing properly
+      if (videoIframe) {
+        const currentSrc = videoIframe.src;
+        // Force a small refresh to ensure video continues
+        setTimeout(function() {
+          if (videoIframe.src === currentSrc) {
+            videoIframe.src = currentSrc;
+          }
+        }, 100);
+      }
     }
     
     // Check if audio is already playing (for browsers that allow autoplay)
