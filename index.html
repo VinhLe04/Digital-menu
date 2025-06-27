@@ -29,13 +29,32 @@
 <body>
   <iframe
     id="player"
-    src="https://www.youtube.com/embed/MSmKGhBhc1I?autoplay=1&mute=1&loop=1&playlist=MSmKGhBhc1I&controls=0&disablekb=1&modestbranding=1&rel=0&showinfo=0&fs=0"
+    src="https://www.youtube.com/embed/MSmKGhBhc1I
+         ?autoplay=1
+         &loop=1
+         &playlist=MSmKGhBhc1I
+         &controls=0
+         &disablekb=1
+         &modestbranding=1
+         &rel=0
+         &showinfo=0
+         &fs=0
+         &enablejsapi=1"
     frameborder="0"
     allow="autoplay; fullscreen"
     allowfullscreen
   ></iframe>
 
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // onReady unmute
+    function onYouTubeIframeAPIReady() {
+      new YT.Player('player', {
+        events: {
+          'onReady': e => e.target.unMute()
+        }
+      });
+    }
     // Prevent right-click and keypress
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => e.preventDefault());
