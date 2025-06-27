@@ -24,40 +24,109 @@
       height: 100vh;
       pointer-events: none;
     }
+    #audio-permission {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #audio-permission button {
+      background: #ff0000;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+      margin: 0 10px;
+    }
+    #audio-permission button:hover {
+      background: #cc0000;
+    }
+    #audio-permission button:last-child {
+      background: #666666;
+    }
+    #audio-permission button:last-child:hover {
+      background: #444444;
+    }
+    #audio-permission p {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
   <iframe
     id="player"
-    src="https://www.youtube.com/embed/MSmKGhBhc1I
-         ?autoplay=1
-         &loop=1
-         &playlist=MSmKGhBhc1I
-         &controls=0
-         &disablekb=1
-         &modestbranding=1
-         &rel=0
-         &showinfo=0
-         &fs=0
-         &enablejsapi=1"
+    src="https://www.youtube.com/embed/MSmKGhBhc1I?autoplay=1&mute=1&loop=1&playlist=MSmKGhBhc1I&controls=0&disablekb=1&modestbranding=1&rel=0&showinfo=0&fs=0"
     frameborder="0"
     allow="autoplay; fullscreen"
     allowfullscreen
   ></iframe>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <audio id="background-audio" loop>
+    <source src="audio.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div id="audio-permission">
+    <div>
+      <p>Would you like to enable audio playback?</p>
+      <button onclick="enableAudio()">Enable Audio</button>
+      <button onclick="continueWithoutAudio()">Continue Without Audio</button>
+    </div>
+  </div>
+
   <script>
-    // onReady unmute
-    function onYouTubeIframeAPIReady() {
-      new YT.Player('player', {
-        events: {
-          'onReady': e => e.target.unMute()
-        }
-      });
-    }
     // Prevent right-click and keypress
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => e.preventDefault());
+    
+    // Function to enable audio after user interaction
+    function enableAudio() {
+      const audio = document.getElementById('background-audio');
+      const permissionOverlay = document.getElementById('audio-permission');
+      
+      // Try to play the audio
+      audio.play().then(function() {
+        // Audio started successfully
+        console.log('Audio playback started');
+        // Hide the permission overlay
+        permissionOverlay.style.display = 'none';
+      }).catch(function(error) {
+        // Audio failed to start
+        console.log('Audio playback failed:', error);
+        alert('Unable to play audio. Please check your browser settings.');
+      });
+    }
+    
+    // Function to continue without audio
+    function continueWithoutAudio() {
+      const permissionOverlay = document.getElementById('audio-permission');
+      console.log('User chose to continue without audio');
+      // Hide the permission overlay
+      permissionOverlay.style.display = 'none';
+    }
+    
+    // Check if audio is already playing (for browsers that allow autoplay)
+    document.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('background-audio');
+      
+      // If audio is already playing, hide the overlay
+      if (!audio.paused) {
+        document.getElementById('audio-permission').style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
